@@ -2,14 +2,13 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const $ = require('cheerio');
 const download = require('image-downloader');
-const sleep = require('sleep');
 
 const instaUrl = "https://www.instagram.com/" + process.argv[2];
 
 
 (async () => {
 
-    console.log("sleeping");
+    console.log("Waiting for page to load");
     new Promise(done => setTimeout(done, 5000));
 
     const browser = await puppeteer.launch({
@@ -111,6 +110,11 @@ async function singleScroll(page){
 }
 
 let writeHtml = function (html) {
+  let dir = "./webpages"
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+  }
+
   fs.writeFile("./webpages/data.html", html, function (err) {
     if (err) {
       throw err
@@ -121,6 +125,11 @@ let writeHtml = function (html) {
 
 let downloadImages = function (imgUrls, username) {
   let counter = 1;
+
+  let dir = "./images"
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+  }
 
   imgUrls.forEach(element => {
     let options = {
